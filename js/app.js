@@ -3,10 +3,10 @@
 // --- Kaardi seadistused: muuda neid vastavalt oma rakendusele ---
 const MAP_SETTINGS = {
   // Leafleti koordinaadid on kujul [laius, pikkus]. Piirang on näidisena Eesti ja lähiala ümber.
-  startCenter: [58.7, 25.5],
-  startZoom: 8,
+  startCenter: [59.397, 27.26],
+  startZoom: 12,
   minZoom: 8,
-  maxZoom: 17,
+  maxZoom: 18,
   maxBounds: [[56.0, 19.0], [61.5, 30.0]],
   maxBoundsViscosity: 1.0,
   title: 'Minu kaart',
@@ -55,35 +55,66 @@ map.setMaxBounds(MAP_SETTINGS.maxBounds);
 document.getElementById('app-title').textContent = MAP_SETTINGS.title;
 document.getElementById('app-description').textContent = MAP_SETTINGS.description;
 
-function makePopup(properties) {
-  // DOM + textContent väldib GeoJSON-ist tuleva HTML-i käivitamist.
+function makePopup(properties, layerConfig = {}) {
+  const attrs = properties || {};
   const container = document.createElement('div');
-  const entries = Object.entries(properties || {});
-  const preferredTitle = properties && (properties.name || properties.nimi || properties.title || properties.nimetus);
+
+  // Määra pealkirja atribuut.
+  const fallbackTitleField = [
+    'name', 'nimi', 'title', 'nimetus'
+  ].find(key => attrs[key] !== null &&
+                attrs[key] !== undefined &&
+                attrs[key] !== '');
+
+  const titleField =
+    layerConfig.popupTitleField &&
+    attrs[layerConfig.popupTitleField] !== null &&
+    attrs[layerConfig.popupTitleField] !== undefined
+      ? layerConfig.popupTitleField
+      : fallbackTitleField;
+
   const title = document.createElement('div');
   title.className = 'popup-title';
-  title.textContent = String(preferredTitle || 'Kaardiobjekt');
+  title.textContent = String(
+    titleField ? attrs[titleField] : 'Kaardiobjekt'
+  );
   container.appendChild(title);
 
-  entries.forEach(([key, value]) => {
-    if (value === null || value === undefined || value === '' || ['name', 'nimi', 'title', 'nimetus'].includes(key)) return;
+  // Kui popupFields on määratud, kuva ainult need atribuudid.
+  const fields = Array.isArray(layerConfig.popupFields)
+    ? layerConfig.popupFields
+    : Object.keys(attrs);
+
+  fields.forEach(key => {
+    const value = attrs[key];
+
+    if (
+      value === null ||
+      value === undefined ||
+      value === '' ||
+      key === titleField
+    ) {
+      return;
+    }
+
     const row = document.createElement('div');
     row.className = 'popup-row';
+
     const label = document.createElement('strong');
-    label.textContent = `${key}: `;
+   const displayName = layerConfig.popupLabels?.[key] ?? key;
+label.textContent = `${displayName}: `;
     row.appendChild(label);
+
     const content = document.createElement('span');
-    content.textContent = typeof value === 'object' ? JSON.stringify(value) : String(value);
+    content.textContent =
+      typeof value === 'object'
+        ? JSON.stringify(value)
+        : String(value);
+
     row.appendChild(content);
     container.appendChild(row);
   });
 
-  if (entries.length === 0) {
-    const row = document.createElement('div');
-    row.className = 'popup-row';
-    row.textContent = 'Sellel objektil pole atribuutandmeid.';
-    container.appendChild(row);
-  }
   return container;
 }
 
@@ -107,7 +138,29 @@ function createGeoJsonLayer(featureCollection, layerConfig) {
       fillOpacity: Number.isFinite(styleConfig.fillOpacity) ? styleConfig.fillOpacity : 0.85
     }),
     onEachFeature: (feature, layer) => {
-      layer.bindPopup(() => makePopup(feature.properties || {}));
+      layer.bindPopup(() =>
+  makePopup(feature.properties || {}, layerConfig)
+);
+// Lisa kaardile label, kui kihile on määratud labelField.
+const labelField = layerConfig.labelField;
+const labelValue = feature.properties?.[labelField];
+
+if (
+  labelField &&
+  labelValue !== null &&
+  labelValue !== undefined &&
+  labelValue !== ''
+) {
+  const label = document.createElement('span');
+  label.textContent = String(labelValue);
+
+  layer.bindTooltip(label, {
+    permanent: true,
+    direction: layerConfig.labelDirection || 'center',
+    className: 'map-feature-label',
+    opacity: 0.95
+  });
+}
     }
   });
 }
@@ -138,6 +191,7 @@ function addLayerControl(layerItems) {
     });
 
     const note = L.DomUtil.create('p', 'layer-panel-note', container);
+    note.textContent ="Andmed seisuga 30.09.2026";
     L.DomEvent.disableClickPropagation(container);
     L.DomEvent.disableScrollPropagation(container);
     return container;

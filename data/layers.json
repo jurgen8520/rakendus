@@ -6,13 +6,26 @@
     {
       "id": "area",
       "name": "Eluhooned",
-      "url": "./data/area.geojson",
+      "url": "./data/eluhooned.geojson",
       "defaultVisible": true,
+      "labelField": "eluruumide",
+      "labelDirection": "center",
+      "popupTitleField": "lahiaadres",
+      "popupFields": [
+      "esmane_kas",
+      "maapealset",
+      "eluruumide"
+      ],
+        "popupLabels": {
+    "esmane_kas": "Kasutuselevõtu aasta",
+    "maapealset": "Maapealsete korruste arv",
+    "eluruumide": "Eluruumide arv"
+  },
       "style": {
-        "color": "#9a5425",
-        "fillColor": "#e9a15d",
-        "fillOpacity": 0.28,
-        "weight": 2
+        "color": "#0b758a",
+        "fillColor": "#05cbf2",
+        "fillOpacity": 0.2,
+        "weight": 1
       }
     }
   ]
