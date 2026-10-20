@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "name": "Näidiskohad",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Näidispunkt A", "kirjeldus": "Asenda see punkt enda andmetega.", "kategooria": "Näidis" },
+      "geometry": { "type": "Point", "coordinates": [25.465, 58.378] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Näidispunkt B", "kirjeldus": "Pop-up kuvab GeoJSON-i omadused.", "kategooria": "Näidis" },
+      "geometry": { "type": "Point", "coordinates": [24.7536, 59.437] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Näidispunkt C", "kirjeldus": "Koordinaadid on GeoJSON-is kujul [pikkus, laius].", "kategooria": "Näidis" },
+      "geometry": { "type": "Point", "coordinates": [24.5, 58.3859] }
+    }
+  ]
+}

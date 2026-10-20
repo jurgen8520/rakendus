@@ -1,0 +1,90 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #20272d;
+  background: #eef0f2;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+html, body, .app-shell { width: 100%; height: 100%; margin: 0; }
+body { overflow: hidden; }
+#map { width: 100%; height: 100%; background: #e9ecef; }
+
+.map-heading {
+  position: absolute;
+  z-index: 500;
+  left: 18px;
+  top: 18px;
+  width: min(330px, calc(100vw - 36px));
+  padding: 17px 19px 16px;
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(34,44,52,.10);
+  border-radius: 12px;
+  box-shadow: 0 5px 22px rgba(29,39,48,.12);
+  pointer-events: none;
+}
+.map-heading .eyebrow {
+  margin-bottom: 6px;
+  color: #66717b;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .13em;
+}
+.map-heading h1 { margin: 0; font-size: 21px; line-height: 1.25; letter-spacing: -.025em; }
+.map-heading p { margin: 7px 0 0; color: #69737d; font-size: 12px; line-height: 1.45; }
+
+.layer-panel {
+  min-width: 205px;
+  max-width: min(270px, calc(100vw - 36px));
+  padding: 14px 15px;
+  color: #20272d;
+  background: rgba(255,255,255,.97);
+  border: 1px solid rgba(34,44,52,.10);
+  border-radius: 12px;
+  box-shadow: 0 5px 22px rgba(29,39,48,.13);
+}
+.layer-panel-title { margin: 0 0 10px; font-size: 13px; font-weight: 750; }
+.layer-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 9px 0;
+  font-size: 12px;
+  line-height: 1.35;
+  cursor: pointer;
+  user-select: none;
+}
+.layer-option input { width: 15px; height: 15px; margin: 0; accent-color: #2d6f67; cursor: pointer; }
+.layer-swatch { flex: 0 0 10px; width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(0,0,0,.18); }
+.layer-panel-note { margin: 11px 0 0; padding-top: 9px; border-top: 1px solid #edf0f2; color: #7b858d; font-size: 10px; line-height: 1.4; }
+
+.app-status {
+  position: absolute;
+  z-index: 500;
+  left: 18px;
+  bottom: 25px;
+  max-width: calc(100vw - 36px);
+  padding: 7px 10px;
+  color: #525d66;
+  background: rgba(255,255,255,.91);
+  border: 1px solid rgba(34,44,52,.08);
+  border-radius: 7px;
+  box-shadow: 0 2px 9px rgba(29,39,48,.08);
+  font-size: 10px;
+}
+.leaflet-control-attribution { font-size: 10px !important; }
+.leaflet-popup-content { min-width: 130px; }
+.popup-title { margin: 0 0 5px; font-size: 14px; font-weight: 750; }
+.popup-row { margin: 3px 0; color: #4e5962; font-size: 12px; line-height: 1.4; white-space: pre-wrap; overflow-wrap: anywhere; }
+.leaflet-container { font: inherit; }
+
+@media (max-width: 600px) {
+  .map-heading { left: 10px; top: 10px; padding: 12px 14px; width: min(245px, calc(100vw - 20px)); }
+  .map-heading h1 { font-size: 18px; }
+  .map-heading p { font-size: 11px; }
+  .leaflet-top.leaflet-right { top: 126px; }
+  .layer-panel { min-width: 175px; padding: 11px 12px; }
+  .app-status { left: 10px; bottom: 20px; }
+}

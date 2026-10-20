@@ -1,0 +1,20 @@
+{
+  "type": "FeatureCollection",
+  "name": "Näidisala",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Näidisala", "kirjeldus": "See geomeetria on illustratiivne. Asenda see oma päris GeoJSON-andmetega.", "allikas": "Näidisandmed" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [25.0, 58.45],
+          [25.35, 58.45],
+          [25.38, 58.62],
+          [25.08, 58.66],
+          [25.0, 58.45]
+        ]]
+      }
+    }
+  ]
+}
