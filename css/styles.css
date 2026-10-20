@@ -94,19 +94,46 @@ body { overflow: hidden; }
   display: none !important;
 }
 
-/* Kaardiobjektide püsivad label'id */
-.map-feature-label {
-  background: rgba(255, 255, 255, 0.85);
+/* Läbipaistva tausta ja valge piirjoonega label */
+.leaflet-tooltip.map-feature-label {
+  background: transparent;
   border: none;
-  border-radius: 3px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-  color: #30383d;
-  font-size: 11px;
+  box-shadow: none;
+
+  color: #070707;
+  font-size: 12px;
   font-weight: 600;
-  padding: 2px 4px;
+  padding: 0;
   white-space: nowrap;
+
+  /* Piirjoon teksti ümber */
+  -webkit-text-stroke: 0.7px rgb(178, 199, 238);
+  paint-order: stroke fill;
+
+  /* kontuur teiste brauserite jaoks */
+  text-shadow:
+    -1px -1px 0 rgb(178, 199, 238),
+     0   -1px 0 rgb(178, 199, 238),
+     1px -1px 0 rgb(178, 199, 238),
+    -1px  0   0 rgb(178, 199, 238),
+     1px  0   0 rgb(178, 199, 238),
+    -1px  1px 0 rgb(178, 199, 238),
+     0    1px 0 rgb(178, 199, 238),
+     1px  1px 0 rgb(178, 199, 238);
 }
 
-.map-feature-label::before {
+/* Eemalda Leafleti tooltip'i väike osutav kolmnurk */
+.leaflet-tooltip.map-feature-label::before {
   display: none;
+}
+
+/* Vaikimisi on label'id peidetud */
+.leaflet-tooltip.map-feature-label {
+  display: none;
+}
+
+/* Piisava suurenduse korral näita label'eid */
+.leaflet-container.labels-visible
+.leaflet-tooltip.map-feature-label {
+  display: block;
 }

@@ -7,6 +7,7 @@ const MAP_SETTINGS = {
   startZoom: 12,
   minZoom: 8,
   maxZoom: 18,
+  labelMinZoom: 15,
   maxBounds: [[56.0, 19.0], [61.5, 30.0]],
   maxBoundsViscosity: 1.0,
   title: 'Minu kaart',
@@ -35,6 +36,19 @@ const map = L.map('map', {
   worldCopyJump: false,
   attributionControl: true
 });
+
+// Näita label'eid ainult määratud suumitasemest alates.
+function updateLabelVisibility() {
+  const showLabels = map.getZoom() >= MAP_SETTINGS.labelMinZoom;
+
+  map.getContainer().classList.toggle(
+    'labels-visible',
+    showLabels
+  );
+}
+
+map.on('zoomend', updateLabelVisibility);
+updateLabelVisibility();
 
 // Suuminupud üleval paremal
 L.control.zoom({
