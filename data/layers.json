@@ -2,22 +2,10 @@
   "title": "Minu kaardirakendus",
   "description": "Näidisrakendus. Lülita paremal andmekihte sisse või välja.",
   "layers": [
-    {
-      "id": "places",
-      "name": "Näidiskohad",
-      "url": "./data/places.geojson",
-      "defaultVisible": true,
-      "style": {
-        "color": "#176b87",
-        "fillColor": "#2c9abd",
-        "fillOpacity": 0.9,
-        "weight": 2,
-        "radius": 7
-      }
-    },
+
     {
       "id": "area",
-      "name": "Näidisala",
+      "name": "Eluhooned",
       "url": "./data/area.geojson",
       "defaultVisible": true,
       "style": {

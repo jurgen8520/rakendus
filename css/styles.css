@@ -84,7 +84,12 @@ body { overflow: hidden; }
   .map-heading { left: 10px; top: 10px; padding: 12px 14px; width: min(245px, calc(100vw - 20px)); }
   .map-heading h1 { font-size: 18px; }
   .map-heading p { font-size: 11px; }
-  .leaflet-top.leaflet-right { top: 126px; }
   .layer-panel { min-width: 175px; padding: 11px 12px; }
   .app-status { left: 10px; bottom: 20px; }
+}
+
+/* Peida kaardi pealkirja kast ja olekuinfo kast */
+.map-heading,
+.app-status {
+  display: none !important;
 }

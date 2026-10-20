@@ -31,9 +31,15 @@ const map = L.map('map', {
   maxBoundsViscosity: MAP_SETTINGS.maxBoundsViscosity,
   zoomSnap: 1,
   zoomDelta: 1,
+  zoomControl: false,
   worldCopyJump: false,
   attributionControl: true
 });
+
+// Suuminupud üleval paremal
+L.control.zoom({
+  position: 'topright'
+}).addTo(map);
 
 L.tileLayer(BASEMAP_URL, {
   tms: true,
@@ -107,7 +113,7 @@ function createGeoJsonLayer(featureCollection, layerConfig) {
 }
 
 function addLayerControl(layerItems) {
-  const control = L.control({ position: 'topright' });
+  const control = L.control({ position: 'topleft' });
   control.onAdd = () => {
     const container = L.DomUtil.create('section', 'layer-panel');
     container.setAttribute('aria-label', 'Kaardikihtide valik');
@@ -132,7 +138,6 @@ function addLayerControl(layerItems) {
     });
 
     const note = L.DomUtil.create('p', 'layer-panel-note', container);
-    note.textContent = 'Kihid laaditakse /data kaustast GeoJSON-failidena.';
     L.DomEvent.disableClickPropagation(container);
     L.DomEvent.disableScrollPropagation(container);
     return container;
