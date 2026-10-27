@@ -132,17 +132,92 @@ label.textContent = `${displayName}: `;
   return container;
 }
 
+function getFeatureStyle(feature, layerConfig) {
+  const baseStyle = layerConfig.style || {};
+  const styleBy = layerConfig.styleBy;
+
+  // Kui klassifitseerimist pole määratud, kasuta vana stiili.
+  if (!styleBy) {
+    return baseStyle;
+  }
+
+  const rawValue = feature?.properties?.[styleBy.field];
+
+  const value =
+    rawValue === null ||
+    rawValue === undefined ||
+    rawValue === ""
+      ? NaN
+      : Number(rawValue);
+
+  const selectedClass = Number.isFinite(value)
+    ? styleBy.classes.find(cls =>
+        (cls.min === undefined || value >= cls.min) &&
+        (cls.max === undefined || value < cls.max)
+      )
+    : null;
+
+  const fillColor =
+    selectedClass?.color ??
+    styleBy.noDataColor ??
+    baseStyle.fillColor ??
+    "#bdbdbd";
+
+  return {
+    ...baseStyle,
+    fillColor: fillColor
+  };
+}
+
 function createGeoJsonLayer(featureCollection, layerConfig) {
   const styleConfig = layerConfig.style || {};
-  return L.geoJSON(featureCollection, {
-    style: () => ({
+    function getFeatureStyle(feature) {
+    const style = {
       color: styleConfig.color || '#2d6f67',
-      weight: Number.isFinite(styleConfig.weight) ? styleConfig.weight : 2,
-      opacity: Number.isFinite(styleConfig.opacity) ? styleConfig.opacity : 0.95,
-      fillColor: styleConfig.fillColor || styleConfig.color || '#2d6f67',
-      fillOpacity: Number.isFinite(styleConfig.fillOpacity) ? styleConfig.fillOpacity : 0.22,
+      weight: Number.isFinite(styleConfig.weight)
+        ? styleConfig.weight : 2,
+      opacity: Number.isFinite(styleConfig.opacity)
+        ? styleConfig.opacity : 0.95,
+      fillColor: styleConfig.fillColor ||
+        styleConfig.color || '#2d6f67',
+      fillOpacity: Number.isFinite(styleConfig.fillOpacity)
+        ? styleConfig.fillOpacity : 0.22,
       dashArray: styleConfig.dashArray || null
-    }),
+    };
+
+    const styleBy = layerConfig.styleBy;
+
+    // Kui kihil pole väärtuspõhist värviskaalat,
+    // kasuta senist kujundust.
+    if (!styleBy || !Array.isArray(styleBy.classes)) {
+      return style;
+    }
+
+    const rawValue = feature?.properties?.[styleBy.field];
+
+    const value =
+      rawValue === null ||
+      rawValue === undefined ||
+      rawValue === ''
+        ? NaN
+        : Number(rawValue);
+
+    const selectedClass = Number.isFinite(value)
+      ? styleBy.classes.find(item =>
+          (item.min === undefined || value >= item.min) &&
+          (item.max === undefined || value < item.max)
+        )
+      : null;
+
+    style.fillColor =
+      selectedClass?.color ||
+      styleBy.noDataColor ||
+      style.fillColor;
+
+    return style;
+  }
+  return L.geoJSON(featureCollection, {
+    style: feature => getFeatureStyle(feature),
     pointToLayer: (_feature, latlng) => L.circleMarker(latlng, {
       radius: Number.isFinite(styleConfig.radius) ? styleConfig.radius : 6,
       color: styleConfig.color || '#2d6f67',
@@ -171,7 +246,7 @@ if (
   layer.bindTooltip(label, {
     permanent: true,
     direction: layerConfig.labelDirection || 'center',
-    className: 'map-feature-label',
+    className: `map-feature-label ${layerConfig.labelClass || ''}`,
     opacity: 0.95
   });
 }
@@ -258,6 +333,55 @@ async function loadLayers() {
     console.error(error);
     setStatus(`Kaardikihtide laadimine ebaõnnestus: ${error.message}`);
   }
+}
+
+
+function addChoroplethLegend(layerConfig) {
+  const styleBy = layerConfig.styleBy;
+
+  if (!styleBy?.classes?.length) return;
+
+  const legend = L.control({
+    position: "bottomright"
+  });
+
+  legend.onAdd = function () {
+    const div = L.DomUtil.create(
+      "div",
+      "choropleth-legend"
+    );
+
+    const heading = L.DomUtil.create(
+      "div",
+      "choropleth-legend-title",
+      div
+    );
+
+    heading.textContent = layerConfig.name;
+
+    styleBy.classes.forEach(item => {
+      const row = L.DomUtil.create(
+        "div",
+        "choropleth-legend-row",
+        div
+      );
+
+      const swatch = L.DomUtil.create(
+        "span",
+        "choropleth-legend-swatch",
+        row
+      );
+
+      swatch.style.backgroundColor = item.color;
+
+      const label = L.DomUtil.create("span", "", row);
+      label.textContent = item.label;
+    });
+
+    return div;
+  };
+
+  legend.addTo(map);
 }
 
 loadLayers();

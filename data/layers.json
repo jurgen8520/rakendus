@@ -1,10 +1,11 @@
 {
   "title": "Kohtla-Järve eluhooned",
-  "description": "Näidisrakendus. Lülita paremal andmekihte sisse või välja.",
+  "description": "Lülita vasakul kihtide kuvamine sisse või välja.",
   "layers": [
 
+
     {
-      "id": "area",
+      "id": "2",
       "name": "Eluhooned",
       "url": "./data/eluhooned.geojson",
       "defaultVisible": true,
@@ -25,6 +26,39 @@
         "color": "#0b758a",
         "fillColor": "#05cbf2",
         "fillOpacity": 0.2,
+        "weight": 1
+      }
+    },
+      {
+      "id": "1",
+      "name": "Koormusindeks",
+      "url": "./data/koormusindeks.json",
+      "defaultVisible": false,
+      "labelField": "k_indeks",
+      "labelDirection": "center",
+      "labelClass": "label-koormusindeks",
+      "popupTitleField": "lahiaadres",
+      "popupFields": [
+      "k_indeks"
+      ],
+        "popupLabels": {
+    "k_indeks": "Koormusindeks"
+  },
+  "styleBy": {
+  "field": "k_indeks",
+  "noDataColor": "#bdbdbd",
+  "classes": [
+    { "label": "< 20", "max": 20, "color": "#d73027" },
+    { "label": "20–<50", "min": 20, "max": 50, "color": "#fdae61" },
+    { "label": "50–<100", "min": 50, "max": 100, "color": "#ffffbf" },
+    { "label": "100–<500", "min": 100, "max": 500, "color": "#a6d96a" },
+    { "label": "500+", "min": 500, "color": "#1a9850" }
+  ]
+},
+      "style": {
+        "color": "#000000",
+        "fillColor": "#000000",
+        "fillOpacity": 0.3,
         "weight": 1
       }
     }

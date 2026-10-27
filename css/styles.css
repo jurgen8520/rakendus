@@ -137,3 +137,46 @@ body { overflow: hidden; }
 .leaflet-tooltip.map-feature-label {
   display: block;
 }
+
+.choropleth-legend {
+  background: rgba(255, 255, 255, 0.96);
+  padding: 12px 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.choropleth-legend-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.choropleth-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.choropleth-legend-swatch {
+  display: inline-block;
+  width: 18px;
+  height: 13px;
+  border: 1px solid #888;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Ainult Koormusindeksi kihi label'id */
+.leaflet-tooltip.map-feature-label.label-koormusindeks {
+  color: #1f1f1f;
+  font-size: 13px;
+  font-weight: 700;
+  -webkit-text-stroke: 0.8px white;
+  text-shadow:
+    -1px -1px 0 white,
+     1px -1px 0 white,
+    -1px  1px 0 white,
+     1px  1px 0 white;
+}
